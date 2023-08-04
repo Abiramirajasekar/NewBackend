@@ -33,7 +33,7 @@ router.post("/autenticate",async(req,res)=>{
     }
     const isMatch = await bcrypt.compare(password,user.password)
     if(!isMatch){
-        return res.status(401).json({message:"Incorrect Password:("})
+        return res.status(200).json({message:"Incorrect Password:("})
     }
   const token = generateToken(user)
   res.json({token})
