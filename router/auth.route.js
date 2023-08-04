@@ -15,9 +15,9 @@ router.post("/user",async(req,res)=>{
     const user = await User.findOne({email})
     if(!user){
     const hashedPassword = await bcrypt.hash(password,3)
-    const newUser = new PendingUser({email,password:hashedPassword,name})
+    const newUser = new User({email,password:hashedPassword,name})
     await newUser.save()
-    return res.json({message:"we will get back soon!"})
+    return res.json({message:"Hello user has created succesfully  !"})
     }
     res.status(404).json({message:"User already exists!"})
 
