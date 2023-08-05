@@ -7,7 +7,7 @@ const nodemailer = require("nodemailer")
 const PendingUser = require("../model/pendingUser.model")
 const router = express.Router()
 router.get("/test",(req,res)=>
-    res.json({message :"Api Testing Successfull"})
+    res.json({status:"success",message :"Api Testing Successfull"})
 )
 
 router.post("/user",async(req,res)=>{
@@ -17,9 +17,9 @@ router.post("/user",async(req,res)=>{
     const hashedPassword = await bcrypt.hash(password,3)
     const newUser = new User({email,password:hashedPassword,name})
     await newUser.save()
-    return res.json({message:"Hello user has created succesfully  !"})
+    return res.json({status:"success",message:"Hello user has created succesfully !"})
     }
-    res.status(404).json({message:"User already exists!"})
+    res.status(404).json({status:"error",message:"User already exists!"})
 
 })
 
@@ -29,7 +29,7 @@ router.post("/autenticate",async(req,res)=>{
     const {email,password} = req.body;
     const user = await User.findOne({email})
     if(!user){
-    return res.status(404).json({message:"User not found!Try again!"})
+    return res.status(404).json({status:"error",message:"User not found!Try again!"})
     }
     const isMatch = await bcrypt.compare(password,user.password)
     if(!isMatch){
