@@ -33,10 +33,10 @@ router.post("/autenticate",async(req,res)=>{
     }
     const isMatch = await bcrypt.compare(password,user.password)
     if(!isMatch){
-        return res.status(200).json({message:"Incorrect Password:("})
+        return res.status(200).json({status:"error",message:"Incorrect Password:("})
     }
   const token = generateToken(user)
-  res.json({token})
+  res.json({status:"success",token})
 })
 router.get("/data",verifyToken,(req,res)=>{
     res.json({message:`Welcome ${req.user.email}! This is protected data`})
@@ -46,7 +46,7 @@ router.post("/reset-password",async(req,res)=>{
     const user = await User.findOne({email})
    
     if(!user){
-        res.status(404).json({message:"User not found"})
+        res.status(404).json({status:"error",message:"User not found"})
     }
     const token = Math.random().toString(36).slice(-8)
     user.restPasswordToken = token;
@@ -78,9 +78,9 @@ router.post("/reset-password",async(req,res)=>{
     }
     transporter.sendMail(message,(err,info)=>{
         if(err){
-            res.status(404).json({message:"Somethng went worng"})
+            res.status(404).json({status:"error",message:"Somethng went worng"})
         }
-         res.status(200).json({message:"Password reset email sent"+ info.response})
+         res.status(200).json({status:"success",message:"Password reset email sent"+ info.response})
     })
 })
 
@@ -93,13 +93,13 @@ router.post("/reset-password/:token",async(req,res)=>{
         restPasswordExpires:{$gt:Date.now()},
     })
     if(!user){
-        res.status(404).json({message:"Invalid token"})
+        res.status(200).json({status:"error",message:"Invalid token"})
     }
     const hashedPassword = await bcrypt.hash(password,10);
     user.password  = hashedPassword 
     user.restPasswordToken = null;
     user.restPasswordExpires = null;
     await user.save()
-    res.json({message:"Password reset successfully"})
+    res.json({status:"success",message:"Password reset successfully"})
 })
 module.exports = router
