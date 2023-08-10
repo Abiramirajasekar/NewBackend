@@ -100,8 +100,8 @@ router.post("/reset-password/:token",async(req,res)=>{
     if(!user){
         res.status(200).json({status:"error",message:"Invalid token"})
     }
-    const hashedPassword = await (password,10);
-    user.password  = hashedPassword 
+    // const hashedPassword = await (password,10);
+    user.password  = password 
     user.restPasswordToken = null;
     user.restPasswordExpires = null;
     await user.save()
