@@ -14,8 +14,8 @@ router.post("/user",async(req,res)=>{
     const{email,password,name} = req.body;
     const user = await User.findOne({email})
     if(!user){
-    const hashedPassword = await  s(password,3)
-    const newUser = new User({email,password:hashedPassword,name})
+    // const hashedPassword = await (password,3)
+    const newUser = new User({email,password,name})
     await newUser.save()
     return res.json({status:"success",message:"Hello user has created succesfully !"})
     }
@@ -31,12 +31,17 @@ router.post("/autenticate",async(req,res)=>{
     if(!user){
     return res.status(404).json({status:"error",message:"User not found!Try again!"})
     }
-    const isMatch = await (password,user.password)
-    if(!isMatch){
-        return res.status(200).json({status:"error",message:"Incorrect Password:("})
+    // const isMatch = await(password,user.password)
+    if(password === user.password){
+        const token = generateToken(user)
+        res.json({status:"success",token})
     }
-  const token = generateToken(user)
-  res.json({status:"success",token})
+    // if(!isMatch){
+      else{
+        return res.status(200).json({status:"error",message:"Incorrect Password:("})
+      }  
+    // }
+
 })
 router.get("/data",verifyToken,(req,res)=>{
     res.json({message:`Welcome ${req.user.email}! This is protected data`})
