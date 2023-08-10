@@ -81,7 +81,7 @@ router.post("/reset-password",async(req,res)=>{
         to:user.email,
         subject:"Password reset request",
        
-         html:`${htmlEmail} \n\n You are reciving this email because you(or someone else)has requested a password reset for your account.\n\n\n please use the following token to rest your password "${Tkn}".\nIf you did not request a password reset,Please ignore this mail.\n\n\n Thank you!`
+         html:`${htmlEmail} \n\n You are reciving this email because you(or someone else)has requested a password reset for your account.\n\n\n please use the following token to rest your password ${Tkn}\nIf you did not request a password reset,Please ignore this mail.\n\n\n Thank you!`
         
     }
     transporter.sendMail(message,(err,info)=>{
