@@ -72,12 +72,16 @@ router.post("/reset-password",async(req,res)=>{
     <h4>here is your reset password requesting code: </h4>
     </body>
     </html>`
+    
+    let Tkn = `<html>
+    <h1>${token}</h1>
+    </html>`
     const message = {
         from:"rockfortlabs.skk@gmail.com",
         to:user.email,
         subject:"Password reset request",
        
-         html:`${htmlEmail} \n\n You are reciving this email because you(or someone else)has requested a password reset for your account.\n\n please use the following token to rest your password ${token}.If you did not request a password reset,Please ignore this mail.\n\n Thank you!`
+         html:`${htmlEmail} \n\n You are reciving this email because you(or someone else)has requested a password reset for your account.\n\n please use the following token to rest your password "${Tkn}".If you did not request a password reset,Please ignore this mail.\n\n Thank you!`
         
     }
     transporter.sendMail(message,(err,info)=>{
